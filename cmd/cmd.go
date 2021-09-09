@@ -5,6 +5,7 @@ import (
 	"github.com/dandyhuang/cmd_tools/internal/biz"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+	"io/ioutil"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -57,8 +58,19 @@ var json2pb= &cobra.Command{
 		fmt.Println("获取配置文件的mysql.url", viper.GetString(`mysql.url`))
 		fmt.Println("获取配置文件的redis.url", viper.GetStringSlice(`redis`))
 		fmt.Println("获取配置文件的smtp", viper.GetStringMap("smtp"))
+		jsonFile, err := os.Open( viper.GetString("input_json"))
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		defer jsonFile.Close()
+
+		byteValue, err := ioutil.ReadAll(jsonFile)
+		if err != nil {
+			fmt.Println(err)
+		}
 		biz.JsonToPb(viper.GetString("input_proto_file"),viper.GetString("request_message_name"),
-			[]byte(`{"ad_id":6666}`))
+			byteValue)
 	},
 }
 

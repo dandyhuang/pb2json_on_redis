@@ -10,6 +10,7 @@ import (
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/jhump/protoreflect/dynamic"
 	"github.com/op/go-logging"
+	"github.com/spf13/viper"
 	"sync"
 )
 
@@ -78,7 +79,7 @@ func JsonToPb(protoPath, messageName string, jsonStr []byte) ([]byte, error) {
 	}
 	log.Debugf("JsonToPb marshal any %v", any.Value)
 	redis:=data.CreateRedis()
-	redis.Set(context.Background(), "key", "value", 0)
+	redis.Set(context.Background(), viper.GetString("set_redis_key"), any.Value, 0)
 	return any.Value, nil
 }
 
