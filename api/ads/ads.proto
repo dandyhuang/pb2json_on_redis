@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb2json.api;
+option go_package = "github.com/dandyhuang/pb2json_on_redis/api/ads/;ads";
+message TAdInfo {
+  // 广告单元信息,t_ad_info表
+  int32 ad_id = 1; // 广告单元id
+  string ad_name = 2; // 广告单元名称
+  int32 ad_category = 3; // 广告行业分类
+  int32 ad_display_type = 4; // 支持的广告形式 1:信息流,2:开屏,3:banner,4:插屏,5:原生
+}

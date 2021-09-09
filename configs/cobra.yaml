@@ -1,0 +1,23 @@
+port: 10666
+mysql:
+  url: "(127.0.0.1:3306)/test"
+  username: root
+  password: 123456
+redis:
+  - 127.0.0.1:6377
+  - 127.0.0.1:6378
+  - 127.0.0.1:6379
+smtp:
+  enable: true
+  addr: mail_addr
+to:
+  - xxx@gmail.com
+  - xxx@163.com
+
+input_proto_file: ./api/ads/ads.proto
+service_name: zeus.proto.ZeusService
+method_name: Predict
+request_message_name: pb2json.api.TAdInfo
+response_message_name: zeus.proto.ZeusResponse
+input_json: ./data/input.json
+set_redis_key: ad_1234
