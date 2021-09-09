@@ -14,7 +14,7 @@ to:
   - xxx@gmail.com
   - xxx@163.com
 
-input_proto_file: ./api/ads/ads.proto
+input_proto_file: ./api/ads/user_app_download.proto
 request_message_name: pb2json.api.UserAppDownloadInfo
 response_message_name: zeus.proto.ZeusResponse
 input_json: ./data/app_download.json
