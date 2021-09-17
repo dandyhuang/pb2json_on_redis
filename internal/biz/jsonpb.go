@@ -1,16 +1,14 @@
 package biz
 
 import (
-	"context"
 	"fmt"
-	"github.com/dandyhuang/cmd_tools/internal/data"
+	pb2json_api "github.com/dandyhuang/cmd_tools/api/ads"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/jhump/protoreflect/dynamic"
 	"github.com/op/go-logging"
-	"github.com/spf13/viper"
 	"sync"
 )
 
@@ -78,8 +76,7 @@ func JsonToPb(protoPath, messageName string, jsonStr []byte) ([]byte, error) {
 		return nil, nil
 	}
 	log.Debugf("JsonToPb marshal any %v", any.Value)
-	redis:=data.CreateRedis()
-	redis.Set(context.Background(), viper.GetString("set_redis_key"), any.Value, 0)
+
 	return any.Value, nil
 }
 
@@ -100,4 +97,11 @@ func PbToJson(protoPath, messageName string, protoData []byte) ([]byte, error) {
 
 	jsonByte, err := dymsg.MarshalJSON()
 	return jsonByte, err
+}
+
+func EncodeItemMessage(value []byte) ([]byte, error) {
+	data:=&pb2json_api.ItemFeature {
+		ItemFeature: value,
+	}
+	return proto.Marshal(data)
 }

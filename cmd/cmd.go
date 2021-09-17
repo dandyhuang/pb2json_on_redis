@@ -1,12 +1,15 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"github.com/dandyhuang/cmd_tools/internal/biz"
+	"github.com/dandyhuang/cmd_tools/internal/data"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -47,6 +50,7 @@ var pb2json = &cobra.Command{
 		fmt.Println("获取配置文件的mysql.url", viper.GetString(`mysql.url`))
 		fmt.Println("获取配置文件的redis.url", viper.GetStringSlice(`redis`))
 		fmt.Println("获取配置文件的smtp", viper.GetStringMap("smtp"))
+		fmt.Println("pb2json args are : " + strings.Join(args, " "))
 	},
 }
 
@@ -58,6 +62,7 @@ var json2pb= &cobra.Command{
 		fmt.Println("获取配置文件的mysql.url", viper.GetString(`mysql.url`))
 		fmt.Println("获取配置文件的redis.url", viper.GetStringSlice(`redis`))
 		fmt.Println("获取配置文件的smtp", viper.GetStringMap("smtp"))
+		fmt.Println("pb2json args are : " + strings.Join(args, " "))
 		jsonFile, err := os.Open( viper.GetString("input_json"))
 		if err != nil {
 			fmt.Println(err)
@@ -69,8 +74,16 @@ var json2pb= &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 		}
-		biz.JsonToPb(viper.GetString("input_proto_file"),viper.GetString("request_message_name"),
+		anyValue, _:=biz.JsonToPb(viper.GetString("input_proto_file"),viper.GetString("request_message_name"),
 			byteValue)
+		if args[0] == "" {
+			v,_:=biz.EncodeItemMessage(anyValue)
+			anyValue = anyValue[:0]
+			anyValue = v
+		}
+
+		redis:=data.CreateRedis()
+		redis.Set(context.Background(), viper.GetString("set_redis_key"), anyValue, 0)
 	},
 }
 
