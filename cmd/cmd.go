@@ -76,12 +76,12 @@ var json2pb= &cobra.Command{
 		}
 		anyValue, _:=biz.JsonToPb(viper.GetString("input_proto_file"),viper.GetString("request_message_name"),
 			byteValue)
-		if args[0] == "" {
+		if len(args) > 0 {
 			v,_:=biz.EncodeItemMessage(anyValue)
 			anyValue = anyValue[:0]
 			anyValue = v
 		}
-
+		fmt.Println("anyValue", anyValue)
 		redis:=data.CreateRedis()
 		redis.Set(context.Background(), viper.GetString("set_redis_key"), anyValue, 0)
 	},
