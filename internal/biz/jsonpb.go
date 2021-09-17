@@ -61,7 +61,7 @@ func JsonToPb(protoPath, messageName string, jsonStr []byte) ([]byte, error) {
 	fd := getProto(protoPath)
 
 	msg := fd.FindMessage(messageName)
-	fmt.Println(messageName, msg, "jsonStr:", jsonStr)
+	fmt.Println(messageName, msg, "jsonStr:", string(jsonStr))
 	dymsg := dynamic.NewMessage(msg)
 	err := dymsg.UnmarshalJSON(jsonStr)
 	if err != nil {
